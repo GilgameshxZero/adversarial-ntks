@@ -1,3 +1,12 @@
+import operator
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+import tensorflow as tf
+import tensorflow_datasets as tfds
+
+
 def downsample_imgs(imgs, image_width):
     return tf.image.resize(
         tf.convert_to_tensor(imgs),
