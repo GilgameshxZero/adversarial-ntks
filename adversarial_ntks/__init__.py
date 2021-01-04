@@ -1,1 +1,1 @@
-from neural_tangents import dataset
+from adversarial_ntks import dataset
