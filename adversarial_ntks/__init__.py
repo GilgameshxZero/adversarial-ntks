@@ -1,1 +1,1 @@
-from dataset import *
+from neural_tangents import dataset
