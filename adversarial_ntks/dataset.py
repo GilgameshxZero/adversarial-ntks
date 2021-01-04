@@ -61,7 +61,7 @@ def plot_sample_data(data, max_i, flat=True, channels=1):
     for i, x in enumerate(data[:max_i]):
         plt.subplot(1, max_i, i + 1)
         plt.imshow(np.clip(np.squeeze(x if not flat else
-                                      jnp.reshape(x, (int(x.shape[0] ** 0.5), -1) if channels == 1 else
+                                      np.reshape(x, (int(x.shape[0] ** 0.5), -1) if channels == 1 else
                                                   (int((x.shape[0] / channels) ** 0.5), -1, channels))), 0, 1))
         plt.axis("off")
     plt.show()
