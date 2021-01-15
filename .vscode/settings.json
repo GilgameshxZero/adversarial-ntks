@@ -1,0 +1,6 @@
+{
+	"markdown.styles": [
+		".vscode/base.css",
+		".vscode/h1.subtitled.css"
+	]
+}

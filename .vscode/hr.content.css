@@ -1,0 +1,21 @@
+:root {
+	--hr-content: '❄';
+}
+
+hr {
+	width: 75%;
+	height: 0;
+	margin: 1.2em auto;
+	overflow: visible;
+
+	border: none;
+	text-align: center;
+	break-inside: avoid;
+	page-break-inside: avoid;
+}
+
+hr:after {
+	position: relative;
+	top: -0.6em;
+	content: var(--hr-content);
+}
