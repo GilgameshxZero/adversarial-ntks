@@ -30,16 +30,13 @@ def get_np_data(
     split: See https://www.tensorflow.org/datasets/splits
     """
 
-    xs, ys = operator.itemgetter('image', 'label')(
-        tfds.as_numpy(
-            tfds.load(
-                name=name,
-                split=split,
-                batch_size=-1,
-                data_dir="./data",
-            )
-        )
-    )
+    xs, ys = operator.itemgetter('image', 'label')(tfds.as_numpy(
+        tfds.load(
+            name=name,
+            split=split,
+            batch_size=-1,
+            data_dir="./data",
+        )))
 
     xs = xs.astype(np.float64)
     xs /= 255.0  # normalize
@@ -58,6 +55,7 @@ def get_np_data(
 
 
 def plot_sample_data(data, max_i, flat=True, channels=1):
+    # yapf: disable
     for i, x in enumerate(data[:max_i]):
         plt.subplot(1, max_i, i + 1)
         plt.imshow(np.clip(np.squeeze(x if not flat else
@@ -65,3 +63,4 @@ def plot_sample_data(data, max_i, flat=True, channels=1):
                                                   (int((x.shape[0] / channels) ** 0.5), -1, channels))), 0, 1))
         plt.axis("off")
     plt.show()
+    # yapf: enable
