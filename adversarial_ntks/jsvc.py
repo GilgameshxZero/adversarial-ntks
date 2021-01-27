@@ -53,6 +53,7 @@ def sv_gram(clf: svm.SVC, X: jnp.ndarray) -> jnp.ndarray:
         raise NotImplementedError()
     else:
         # Laplacian
+        # TODO: Make custom kernels more configurable
         dists = gram(func=lambda x, y: jnp.sum(jnp.abs(x - y)), X1=SV, X2=X)
         return jnp.exp(-0.01 * clf._gamma * dists)
 

@@ -29,12 +29,7 @@ class TestJSVC(unittest.TestCase):
         )
         self.jtest_xs = jnp.array(self.test_xs)
 
-    def test_linear(self):
-        clf = svm.SVC(C=3, kernel="linear").fit(
-            X=self.train_xs,
-            y=self.train_ys,
-        )
-
+    def check_jsvc(self, clf: svm.SVC):
         self.assertTrue(
             np.allclose(
                 clf.decision_function(self.test_xs),
@@ -42,3 +37,17 @@ class TestJSVC(unittest.TestCase):
             ))
         self.assertTrue(
             all(clf.predict(self.test_xs) == jsvc.predict(clf, self.jtest_xs)))
+
+    def test_linear(self):
+        self.check_jsvc(
+            svm.SVC(C=3, kernel="linear").fit(
+                X=self.train_xs,
+                y=self.train_ys,
+            ))
+
+    def test_rbf(self):
+        self.check_jsvc(
+            svm.SVC(C=3, kernel="rbf").fit(
+                X=self.train_xs,
+                y=self.train_ys,
+            ))
