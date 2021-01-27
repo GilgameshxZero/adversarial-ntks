@@ -13,7 +13,7 @@ Neural networks have been at the focus of image recognition research since AlexN
 
 However, unlike some classical methods, neural networks are known to be adversarially susceptible: by modifying an image slightly in a way which would not cause confusion to a human, many neural networks can be manipulated to classify incorrectly. Take, for example, the state-of-the-art CLIP (Contrastive Language-Image Pretraining) network released by OpenAI less than two weeks ago.
 
-![](proposal-urop-iap21.md-assets/2021-01-14-14-55-13.png)
+![](yang-adversarial-examples-for-kernel-methods.md-assets/2021-01-14-14-55-13.png)
 ***Figure 1.** On the left, an image of an airplane from the CIFAR-10 dataset, slightly perturbed to become the adversarial image in the middle, such that CLIP recognizes the adversarial image as a cat instead. Credit: [Stanislav Fort](https://stanislavfort.github.io/2021/01/12/OpenAI_CLIP_adversarial_examples.html).*
 
 Adversarial attacks are modeled by their bounds: the perturbed image in Figure 1 is constrained by the perturbation intensity from the original of each pixel, an example of an L-infinity bound. Perturbations can also be modeled in terms of L-2 bounds, rotations, shifts, slants, etc.—notably, by definition, humans are robust to all such attack models.
@@ -63,7 +63,3 @@ We will primarily be using Google Colab for any computational experiments, and o
 ## Personal Statement
 
 Through this UROP, I hope primarily to gain experience working in theoretical adversarial robustness, build the mathematical maturity to better conduct research in this area in the future, as well as establish personal relationships with Tony, Prof. Rakhlin, and Prof. Wornell, potentially in hopes of conducting an M. Eng. under their guidance next year.
-
-
-
-
