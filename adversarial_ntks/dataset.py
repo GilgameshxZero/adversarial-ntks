@@ -24,6 +24,8 @@ def get_np_data(
     binary_labels=False,
     flatten=True,
     image_width=None,
+    data_dir=os.path.abspath(
+                os.path.join(os.path.dirname(__file__), "..", "data"))
 ):
     """
     name: e.g. "mnist", "cifar10". See
@@ -36,8 +38,7 @@ def get_np_data(
             name=name,
             split=split,
             batch_size=-1,
-            data_dir=os.path.abspath(
-                os.path.join(os.path.dirname(__file__), "..", "data")),
+            data_dir=data_dir,
         )))
 
     xs = xs.astype(np.float64)
