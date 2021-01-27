@@ -1,4 +1,5 @@
 import operator
+import os
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,12 +31,13 @@ def get_np_data(
     split: See https://www.tensorflow.org/datasets/splits
     """
 
-    xs, ys = operator.itemgetter('image', 'label')(tfds.as_numpy(
+    xs, ys = operator.itemgetter("image", "label")(tfds.as_numpy(
         tfds.load(
             name=name,
             split=split,
             batch_size=-1,
-            data_dir="./data",
+            data_dir=os.path.abspath(
+                os.path.join(os.path.dirname(__file__), "..", "data")),
         )))
 
     xs = xs.astype(np.float64)
@@ -54,10 +56,10 @@ def get_np_data(
     return xs, ys
 
 
-def plot_sample_data(data, max_i, flat=True, channels=1):
+def plot_sample_data(data, flat=True, channels=1):
     # yapf: disable
-    for i, x in enumerate(data[:max_i]):
-        plt.subplot(1, max_i, i + 1)
+    for i, x in enumerate(data):
+        plt.subplot(1, data.shape[0], i + 1)
         plt.imshow(np.clip(np.squeeze(x if not flat else
                                       np.reshape(x, (int(x.shape[0] ** 0.5), -1) if channels == 1 else
                                                  (int((x.shape[0] / channels) ** 0.5), -1, channels))), 0, 1))

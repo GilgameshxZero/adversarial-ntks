@@ -2,11 +2,11 @@ import numpy as np
 import sklearn
 
 
-def pgd(X, Y, grad_func, eps, eps_norm, steps, step_size, step_norm):
+def pgd(X, Y, grad_func, eps, eps_norm, num_steps, step_size, step_norm):
     """
     Perform PGD on a dataset given a gradient function for the classifier.
 
-    X: np.array of input images.
+    X: np.array of input images. Pixels in [0, 1].
     Y: np.array of binary labels.
     grad_func: Function which takes a set of inputs (X), and returns an np.array
     of the gradient of the classifier at the image.
@@ -16,28 +16,32 @@ def pgd(X, Y, grad_func, eps, eps_norm, steps, step_size, step_norm):
     step_size:
     step_norm: Norm for `step_size`.
     """
-    assert(X.shape[0] == Y.shape[0])
+    assert X.shape[0] == Y.shape[0]
 
     res = np.copy(X)
-    for step in range(steps):
+    for step in range(num_steps):
         res_grad = grad_func(res)
         res_grad_Y = res_grad * (Y * -2 + 1).reshape((-1, 1))
 
-        # Step.
+        # Compute step, scaled to have size step_size under norm step_norm
         if step_norm == np.inf:
-            res_delta = np.sign(res_grad_Y) * step_size
+            step = np.sign(res_grad_Y) * step_size
         else:
-            res_delta = sklearn.preprocessing.normalize(
-                res_grad_Y, norm="l" + str(step_norm), axis=1) * step_size
-            res += res_delta
+            step = step_size * sklearn.preprocessing.normalize(
+                res_grad_Y, norm="l" + str(step_norm), axis=1)
 
-        # Project.
+        # Move a step
+        res += step
+
+        # Project to epsilon-ball
         if eps_norm == np.inf:
             res = np.clip(res, X - eps, X + eps)
         else:
-            mask = res - X
-            res = X + eps * sklearn.preprocessing.normalize(
-                mask, norm="l" + str(eps_norm), axis=1)
-            res = np.clip(res, 0, 1)
+            offset = res - X
+            res = Y + eps * sklearn.preprocessing.normalize(
+                offset, norm="l" + str(eps_norm), axis=1)
+
+        # Clip to valid pixel range
+        res = np.clip(res, 0, 1)
 
     return res

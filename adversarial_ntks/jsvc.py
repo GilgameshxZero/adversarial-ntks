@@ -69,12 +69,14 @@ def decision_function(clf: svm.SVC, X: jnp.ndarray) -> jnp.ndarray:
     return (dual_coefs @ gmat)[0] + clf.intercept_
 
 
-def decision_function_single(clf: svm.SVC, x: jnp.ndarray) -> float:
-    """
-    x: shape (n_features, )
-    return: float
-    """
-    return decision_function(clf, jnp.array([x]))[0]
+def _decision_function_sum(clf: svm.SVC, X: jnp.ndarray) -> float:
+    return decision_function(clf, X).sum()
+
+
+grad_decision_function = jax.jit(
+    jax.grad(_decision_function_sum, 1),
+    static_argnums=0,
+)
 
 
 def predict(clf: svm.SVC, X: jnp.ndarray) -> jnp.ndarray:
