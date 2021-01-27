@@ -19,5 +19,5 @@ flax
 neural-tangents
 
 jupyterlab
-
+ipywidgets
 autopep8
