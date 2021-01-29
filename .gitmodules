@@ -1,0 +1,6 @@
+[submodule "jax"]
+	path = jax
+	url = git@github.com:GilgameshxZero/jax.git
+[submodule "vision_transformer"]
+	path = vision_transformer
+	url = git@github.com:GilgameshxZero/vision_transformer.git

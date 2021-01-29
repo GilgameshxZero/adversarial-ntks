@@ -1,0 +1,16 @@
+h2 {
+	margin-bottom: 0;
+	padding-bottom: 0;
+
+	border: none;
+}
+
+h2+* {
+	margin-top: 0.1em;
+	margin-bottom: 0.7em;
+	padding-bottom: 0.3em;
+	width: 80%;
+
+	border-bottom: 0.1em solid var(--border-color);
+	text-indent: 0;
+}
