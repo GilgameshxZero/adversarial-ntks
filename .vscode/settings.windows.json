@@ -1,7 +1,0 @@
-{
-	"markdown.styles": [
-		".vscode/base.css",
-		".vscode/h1.subtitled.css"
-	],
-	"python.pythonPath": "notebooks\\venv-windows\\Scripts\\python.exe"
-}

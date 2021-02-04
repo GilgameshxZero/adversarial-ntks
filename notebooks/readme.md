@@ -3,8 +3,8 @@
 From this `notebooks/` directory, run
 
 ```bash
-python -m venv venv-wsl
-source venv-wsl/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 pip install --upgrade pip wheel
 pip install --upgrade jax jaxlib==0.1.59+cuda110 -f https://storage.googleapis.com/jax-releases/jax_releases.html
 pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
@@ -42,9 +42,10 @@ System setup:
 Follow <https://jax.readthedocs.io/en/latest/developer.html>.
 
 ```powershell
-python -m venv venv-windows
-.\venv-windows\Scripts\activate
-pip install --upgrade pip wheel numpy scipy six
+python -m venv .venv
+.\.venv\Scripts\activate
+python -m pip install --upgrade pip
+pip install wheel numpy scipy six
 cd ..\jax
 python .\build\build.py `
   --enable_cuda `
@@ -53,11 +54,9 @@ python .\build\build.py `
   --cuda_compute_capabilities='6.1' `
   --cuda_version='11.0' `
   --cudnn_version='8.0.5'
-pip install .\dist\jaxlib-*.whl
-pip install -e .
 cd ..\notebooks
+pip install ..\jax\dist\jaxlib-0.1.60-cp38-none-win_amd64.whl -e ..\jax
 pip install -r requirements.txt
+pip install -e ..\vision_transformer -e ..
 pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
-pip install -e ..\vision_transformer
-pip install -e ..
 ```

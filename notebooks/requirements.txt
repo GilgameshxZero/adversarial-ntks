@@ -10,7 +10,7 @@ tqdm
 clu
 ml_collections
 
-tensorflow
+tensorflow==2.4.1
 tensorflow-datasets
 tensorflow-probability
 
@@ -20,4 +20,5 @@ neural-tangents
 
 jupyterlab
 ipywidgets
+pylint
 autopep8

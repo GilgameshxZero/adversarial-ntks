@@ -25,7 +25,8 @@ def get_np_data(
     flatten=True,
     image_width=None,
     data_dir=os.path.abspath(
-                os.path.join(os.path.dirname(__file__), "..", "data"))
+                os.path.join(os.path.dirname(__file__), "..", "data")),
+    dtype=np.float64
 ):
     """
     name: e.g. "mnist", "cifar10". See
@@ -41,7 +42,7 @@ def get_np_data(
             data_dir=data_dir,
         )))
 
-    xs = xs.astype(np.float64)
+    xs = xs.astype(dtype)
     xs /= 255.0  # normalize
 
     if binary_labels:
