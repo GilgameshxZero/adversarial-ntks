@@ -9,14 +9,15 @@ tqdm
 
 clu
 ml_collections
+cox
 
 tensorflow==2.4.1
 tensorflow-datasets
 tensorflow-probability
 
 flax
-
 neural-tangents
+adversarial-robustness-toolbox
 
 jupyterlab
 ipywidgets

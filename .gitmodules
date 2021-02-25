@@ -4,3 +4,6 @@
 [submodule "vision_transformer"]
 	path = vision_transformer
 	url = git@github.com:GilgameshxZero/vision_transformer.git
+[submodule "robustness"]
+	path = robustness
+	url = https://github.com/GilgameshxZero/robustness
