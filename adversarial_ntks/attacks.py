@@ -1,8 +1,18 @@
 import numpy as np
-import sklearn
+import sklearn.preprocessing
 
 
-def pgd(X, Y, grad_func, eps, eps_norm, num_steps, step_size, step_norm):
+def pgd(
+    X,
+    Y,
+    grad_func,
+    eps,
+    eps_norm,
+    num_steps,
+    step_size,
+    step_norm,
+    pixel_clip=True,
+):
     """
     Perform PGD on a dataset given a gradient function for the classifier.
 
@@ -38,10 +48,11 @@ def pgd(X, Y, grad_func, eps, eps_norm, num_steps, step_size, step_norm):
             res = np.clip(res, X - eps, X + eps)
         else:
             offset = res - X
-            res = Y + eps * sklearn.preprocessing.normalize(
+            res = X + eps * sklearn.preprocessing.normalize(
                 offset, norm="l" + str(eps_norm), axis=1)
 
         # Clip to valid pixel range
-        res = np.clip(res, 0, 1)
+        if pixel_clip:
+            res = np.clip(res, 0, 1)
 
     return res
