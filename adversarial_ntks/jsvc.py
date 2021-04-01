@@ -36,21 +36,27 @@ def gram(
 
 
 def sv_gram(clf: svm.SVC, X: jnp.ndarray) -> jnp.ndarray:
-    """Get gram matrix between support vectors and X.
+    """
+    Get gram matrix between support vectors and X.
     X: shape (n_samples, n_features)
     return: shape (n_SV, n_samples)
+
+    Based off of formulas at
+    https://scikit-learn.org/stable/modules/svm.html#svm-kernels
     """
-    kernel_type = clf.get_params()["kernel"]
     SV = jnp.array(clf.support_vectors_)  # of shape(n_SV, n_features)
 
-    if kernel_type == "linear":
+    if clf.kernel == "linear":
         return SV @ X.T
-    elif kernel_type == "rbf":
+    elif clf.kernel == "rbf":
         dists = gram(func=lambda x, y: jnp.sum((x - y)**2), X1=SV, X2=X)
         return jnp.exp(-clf._gamma * dists)
-    elif kernel_type == "poly":
-        # Poly-4.
-        raise NotImplementedError()
+    elif clf.kernel == "poly":
+        return gram(
+            func=lambda x, y: (clf._gamma * x @ y + clf.coef0)**clf.degree,
+            X1=SV,
+            X2=X,
+        )
     else:
         # Laplacian
         # TODO: Make custom kernels more configurable

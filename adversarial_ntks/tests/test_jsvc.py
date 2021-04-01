@@ -51,3 +51,10 @@ class TestJSVC(unittest.TestCase):
                 X=self.train_xs,
                 y=self.train_ys,
             ))
+
+    def test_poly(self):
+        self.check_jsvc(
+            svm.SVC(C=3, kernel="poly", coef0=np.pi, degree=2).fit(
+                X=self.train_xs,
+                y=self.train_ys,
+            ))
