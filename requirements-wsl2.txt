@@ -1,0 +1,46 @@
+# Prerequisites:
+# cuda-toolkit-11-1 and libcudnn8=8.0.5.39-1+cuda11.1 installed
+
+# BEGIN Things most likely to break
+--find-links https://storage.googleapis.com/jax-releases/jax_releases.html
+jax[cuda-111] 
+
+tensorflow==2.5.0rc0
+# END
+
+# Less critical stuff follows
+
+# Tensorflow related
+tensorflow-datasets
+tensorflow-probability
+
+# Jax related
+flax
+neural-tangents
+
+# Scientific computing
+pandas
+matplotlib
+numpy
+
+scikit-learn
+scipy
+
+tqdm
+
+# ML stuff
+clu
+ml_collections
+cox
+
+# Adversarial robustness related
+adversarial-robustness-toolbox
+
+# Jupyter stuff
+jupyterlab
+ipywidgets
+jedi==0.17.2  # See https://github.com/ipython/ipython/issues/12740#issuecomment-751273584
+
+# Formatting and linting
+pylint
+autopep8

@@ -52,11 +52,7 @@ def sv_gram(clf: svm.SVC, X: jnp.ndarray) -> jnp.ndarray:
         dists = gram(func=lambda x, y: jnp.sum((x - y)**2), X1=SV, X2=X)
         return jnp.exp(-clf._gamma * dists)
     elif clf.kernel == "poly":
-        return gram(
-            func=lambda x, y: (clf._gamma * x @ y + clf.coef0)**clf.degree,
-            X1=SV,
-            X2=X,
-        )
+        return (clf._gamma * SV @ X.T + clf.coef0) ** clf.degree
     else:
         # Laplacian
         # TODO: Make custom kernels more configurable
