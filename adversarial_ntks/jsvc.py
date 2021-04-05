@@ -1,5 +1,4 @@
 """sklearn.svm.SVC in Jax"""
-from typing import Callable
 
 import numpy as np
 from sklearn import svm
@@ -7,32 +6,7 @@ from sklearn import svm
 import jax
 import jax.numpy as jnp
 
-
-def gram(
-    func: Callable,
-    X1: jnp.ndarray,
-    X2: jnp.ndarray,
-) -> jnp.ndarray:
-    """Computes the gram matrix.
-    Taken from https://github.com/IPL-UV/jaxkern.
-
-    Given a function `Callable` and some `params`, we can
-    use the `jax.vmap` function to calculate the gram matrix
-    as the function applied to each of the points.
-    Parameters
-    ----------
-    func : Callable
-        a callable function (kernel or distance)
-    X1 : jax.numpy.ndarray
-        input dataset (n_samples, n_features)
-    Y2 : jax.numpy.ndarray
-        other input dataset (n_samples, n_features)
-    Returns
-    -------
-    mat : jax.numpy.ndarray
-        the gram matrix.
-    """
-    return jax.vmap(lambda x1: jax.vmap(lambda x2: func(x1, x2))(X2))(X1)
+from adversarial_ntks import kernel
 
 
 def sv_gram(clf: svm.SVC, X: jnp.ndarray) -> jnp.ndarray:
@@ -47,17 +21,21 @@ def sv_gram(clf: svm.SVC, X: jnp.ndarray) -> jnp.ndarray:
     SV = jnp.array(clf.support_vectors_)  # of shape(n_SV, n_features)
 
     if clf.kernel == "linear":
-        return SV @ X.T
-    elif clf.kernel == "rbf":
-        dists = gram(func=lambda x, y: jnp.sum((x - y)**2), X1=SV, X2=X)
-        return jnp.exp(-clf._gamma * dists)
+        return kernel.linear(SV, X)
     elif clf.kernel == "poly":
-        return (clf._gamma * SV @ X.T + clf.coef0) ** clf.degree
+        return kernel.poly(
+            SV,
+            X,
+            gamma=clf._gamma,
+            coef0=clf.coef0,
+            degree=clf.degree,
+        )
+    elif clf.kernel == "rbf":
+        return kernel.rbf(SV, X, gamma=clf._gamma)
     else:
         # Laplacian
         # TODO: Make custom kernels more configurable
-        dists = gram(func=lambda x, y: jnp.sum(jnp.abs(x - y)), X1=SV, X2=X)
-        return jnp.exp(-0.01 * clf._gamma * dists)
+        return kernel.laplace(SV, X, gamma=clf._gamma)
 
 
 def decision_function(clf: svm.SVC, X: jnp.ndarray) -> jnp.ndarray:

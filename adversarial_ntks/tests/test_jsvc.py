@@ -45,16 +45,16 @@ class TestJSVC(unittest.TestCase):
                 y=self.train_ys,
             ))
 
-    def test_rbf(self):
+    def test_poly(self):
         self.check_jsvc(
-            svm.SVC(C=3, kernel="rbf").fit(
+            svm.SVC(C=3, kernel="poly", coef0=np.pi, degree=2).fit(
                 X=self.train_xs,
                 y=self.train_ys,
             ))
 
-    def test_poly(self):
+    def test_rbf(self):
         self.check_jsvc(
-            svm.SVC(C=3, kernel="poly", coef0=np.pi, degree=2).fit(
+            svm.SVC(C=3, kernel="rbf").fit(
                 X=self.train_xs,
                 y=self.train_ys,
             ))
