@@ -32,10 +32,10 @@ def sv_gram(clf: svm.SVC, X: jnp.ndarray) -> jnp.ndarray:
         )
     elif clf.kernel == "rbf":
         return kernel.rbf(SV, X, gamma=clf._gamma)
+    elif callable(clf.kernel):
+        return clf.kernel(SV, X)
     else:
-        # Laplacian
-        # TODO: Make custom kernels more configurable
-        return kernel.laplace(SV, X, gamma=clf._gamma)
+        raise NotImplementedError
 
 
 def decision_function(clf: svm.SVC, X: jnp.ndarray) -> jnp.ndarray:
