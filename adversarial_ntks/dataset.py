@@ -1,11 +1,17 @@
 import operator
 import os
+from typing import NamedTuple, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 import tensorflow as tf
 import tensorflow_datasets as tfds
+
+
+class Dataset(NamedTuple):
+    xs: np.ndarray
+    ys: np.ndarray
 
 
 def downsample_imgs(imgs, image_width):
@@ -19,15 +25,15 @@ def downsample_imgs(imgs, image_width):
 
 
 def get_np_data(
-    name,  # "mnist" or "cifar10"
+    name: str,  # "mnist" or "cifar10"
     split,
-    binary_labels=False,
-    flatten=True,
-    image_width=None,
-    data_dir=os.path.abspath(
-                os.path.join(os.path.dirname(__file__), "..", "data")),
-    dtype=np.float64
-):
+    binary_labels: bool = False,
+    flatten: bool = True,
+    image_width: Optional[int] = None,
+    data_dir: str = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "data")),
+    dtype: np.dtype = np.float64,
+) -> Dataset:
     """
     name: e.g. "mnist", "cifar10". See
           https://www.tensorflow.org/datasets/catalog/overview for more details.
@@ -55,13 +61,19 @@ def get_np_data(
     if flatten:
         xs = xs.reshape((len(xs), -1))
 
-    return xs, ys
+    return Dataset(xs=xs, ys=ys)
 
 
-def plot_sample_data(data, flat=True, channels=1):
+def plot_images(
+    data: Dataset,
+    flat: bool = True,
+    channels: int = 1,
+    num_to_plot: int = 10,
+):
     # yapf: disable
-    for i, x in enumerate(data):
-        plt.subplot(1, data.shape[0], i + 1)
+    print(data.ys[:num_to_plot])
+    for i, x in enumerate(data.xs[:num_to_plot]):
+        plt.subplot(1, num_to_plot, i + 1)
         plt.imshow(np.clip(np.squeeze(x if not flat else
                                       np.reshape(x, (int(x.shape[0] ** 0.5), -1) if channels == 1 else
                                                  (int((x.shape[0] / channels) ** 0.5), -1, channels))), 0, 1))
