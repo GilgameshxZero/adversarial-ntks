@@ -7,3 +7,7 @@
 [submodule "robustness"]
 	path = robustness
 	url = https://github.com/GilgameshxZero/robustness
+[submodule "thundersvm"]
+	path = thundersvm
+	url = https://github.com/Xtra-Computing/thundersvm.git
+        ignore = untracked
