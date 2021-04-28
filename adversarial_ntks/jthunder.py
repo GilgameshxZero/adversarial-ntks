@@ -71,6 +71,7 @@ def _sv_gram(
         raise NotImplementedError
 
 
+@jax.partial(jax.jit, static_argnums=0)
 def _decision_function(
     kernel_type: str,
     jtp: _JThunderParams,
@@ -86,8 +87,11 @@ def _decision_function(
     return -(jtp.dual_coefs @ gmat)[0] + jtp.intercept
 
 
-def _decision_function_sum(kernel_type: str, jtp: _JThunderParams,
-                           X: jnp.ndarray) -> float:
+def _decision_function_sum(
+    kernel_type: str,
+    jtp: _JThunderParams,
+    X: jnp.ndarray,
+) -> float:
     return _decision_function(kernel_type, jtp, X).sum()
 
 
