@@ -12,6 +12,7 @@ import tensorflow_datasets as tfds
 class Dataset(NamedTuple):
     xs: np.ndarray
     ys: np.ndarray
+    name: Optional[str] = None
 
 
 def downsample_imgs(imgs, image_width):
@@ -61,7 +62,7 @@ def get_np_data(
     if flatten:
         xs = xs.reshape((len(xs), -1))
 
-    return Dataset(xs=xs, ys=ys)
+    return Dataset(xs=xs, ys=ys, name=f"{name}-{split}")
 
 
 def plot_images(

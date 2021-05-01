@@ -43,6 +43,9 @@ class TestJThunder(unittest.TestCase):
                 clf.predict(self.ds_test.xs).astype(np.int) ==
                 jthunder.predict(clf, self.jtest_xs)))
 
+        self.assertTrue(
+            np.allclose(jthunder.norm(clf), jthunder.norm_naive(clf)))
+
     def test_linear(self):
         self.check_jthunder(
             thundersvm.SVC(C=3, kernel="linear").fit(

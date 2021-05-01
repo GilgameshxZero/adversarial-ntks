@@ -33,11 +33,11 @@ def _get_params(clf: thundersvm.SVC) -> _JThunderParams:
         degree=clf.degree,
         intercept=clf.intercept_[0],
         SV=jnp.array(clf.support_vectors_[:, 1:]),
-        dual_coefs=jnp.array(clf.dual_coef_),
+        dual_coefs=jnp.array(clf.dual_coef_[0]),
     )
 
     assert jtp.SV.shape == (clf.n_support_.sum(), clf.n_features)
-    assert jtp.dual_coefs.shape == (1, clf.n_support_.sum())
+    assert jtp.dual_coefs.shape == (clf.n_support_.sum(), )
 
     return jtp
 
@@ -71,6 +71,37 @@ def _sv_gram(
         raise NotImplementedError
 
 
+def _norm_naive(kernel_type: str, jtp: _JThunderParams) -> float:
+    """Uses more memory than necessary"""
+    if kernel_type == "linear":
+        w = jtp.dual_coefs @ jtp.SV
+        return w @ w
+
+    gmat = _sv_gram(kernel_type, jtp, jtp.SV)  # shape: (n_SV, n_SV)
+    return (jtp.dual_coefs @ gmat @ jtp.dual_coefs)
+
+
+def norm_naive(clf: thundersvm.SVC) -> float:
+    kernel_type = clf.kernel
+    jtp = _get_params(clf)
+    return _norm_naive(kernel_type, jtp)
+
+
+def _norm(kernel_type: str, jtp: _JThunderParams) -> float:
+    """Memory light version"""
+    def f(x):
+        kXx = _sv_gram(kernel_type, jtp, x.reshape(1, -1))  # shape: (n, 1)
+        return (jtp.dual_coefs @ kXx)[0]
+
+    return jtp.dual_coefs @ jax.lax.map(jax.jit(f), jtp.SV)
+
+
+def norm(clf: thundersvm.SVC) -> float:
+    kernel_type = clf.kernel
+    jtp = _get_params(clf)
+    return _norm(kernel_type, jtp)
+
+
 @jax.partial(jax.jit, static_argnums=0)
 def _decision_function(
     kernel_type: str,
@@ -84,7 +115,7 @@ def _decision_function(
     gmat = _sv_gram(kernel_type, jtp, X)  # shape: (n_SV, n_samples)
 
     # Need to do weird sign change so positive is class 1.
-    return -(jtp.dual_coefs @ gmat)[0] + jtp.intercept
+    return -jtp.dual_coefs @ gmat + jtp.intercept
 
 
 def _decision_function_sum(

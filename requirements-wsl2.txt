@@ -19,9 +19,11 @@ flax
 neural-tangents
 
 # Scientific computing
-pandas
 matplotlib
+seaborn
+
 numpy
+pandas
 
 scikit-learn
 scipy
