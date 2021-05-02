@@ -44,7 +44,7 @@ class TestJThunder(unittest.TestCase):
                 jthunder.predict(clf, self.jtest_xs)))
 
         self.assertTrue(
-            np.allclose(jthunder.norm(clf), jthunder.norm_naive(clf)))
+            np.allclose(jthunder.norm2(clf), jthunder.norm2_naive(clf)))
 
     def test_linear(self):
         self.check_jthunder(

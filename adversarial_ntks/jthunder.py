@@ -71,7 +71,7 @@ def _sv_gram(
         raise NotImplementedError
 
 
-def _norm_naive(kernel_type: str, jtp: _JThunderParams) -> float:
+def _norm2_naive(kernel_type: str, jtp: _JThunderParams) -> jnp.float64:
     """Uses more memory than necessary"""
     if kernel_type == "linear":
         w = jtp.dual_coefs @ jtp.SV
@@ -81,13 +81,13 @@ def _norm_naive(kernel_type: str, jtp: _JThunderParams) -> float:
     return (jtp.dual_coefs @ gmat @ jtp.dual_coefs)
 
 
-def norm_naive(clf: thundersvm.SVC) -> float:
+def norm2_naive(clf: thundersvm.SVC) -> jnp.float64:
     kernel_type = clf.kernel
     jtp = _get_params(clf)
-    return _norm_naive(kernel_type, jtp)
+    return _norm2_naive(kernel_type, jtp)
 
 
-def _norm(kernel_type: str, jtp: _JThunderParams) -> float:
+def _norm2(kernel_type: str, jtp: _JThunderParams) -> jnp.float64:
     """Memory light version"""
     def f(x):
         kXx = _sv_gram(kernel_type, jtp, x.reshape(1, -1))  # shape: (n, 1)
@@ -96,10 +96,10 @@ def _norm(kernel_type: str, jtp: _JThunderParams) -> float:
     return jtp.dual_coefs @ jax.lax.map(jax.jit(f), jtp.SV)
 
 
-def norm(clf: thundersvm.SVC) -> float:
+def norm2(clf: thundersvm.SVC) -> jnp.float64:
     kernel_type = clf.kernel
     jtp = _get_params(clf)
-    return _norm(kernel_type, jtp)
+    return _norm2(kernel_type, jtp)
 
 
 @jax.partial(jax.jit, static_argnums=0)
