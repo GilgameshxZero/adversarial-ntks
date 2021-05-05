@@ -12,6 +12,7 @@ import tensorflow_datasets as tfds
 class Dataset(NamedTuple):
     xs: np.ndarray
     ys: np.ndarray
+    num_classes: int
     name: Optional[str] = None
 
 
@@ -73,7 +74,14 @@ def get_np_data(
     if flatten:
         xs = xs.reshape((len(xs), -1))
 
-    return Dataset(xs=xs, ys=ys, name=f"{name}-{split}")
+    assert ys.min() == 0
+
+    return Dataset(
+        xs=xs,
+        ys=ys,
+        num_classes=ys.max() + 1,
+        name=f"{name}-{split}",
+    )
 
 
 def plot_images(

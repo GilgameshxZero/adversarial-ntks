@@ -3,5 +3,7 @@
 **/*.egg-info/
 **/.venv/
 **/.*/
+**/mlruns/
+**/tmp-artifacts/
 
 data/

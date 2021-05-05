@@ -15,6 +15,7 @@ class TestDataset(unittest.TestCase):
         )
         self.assertEqual(ds.xs.shape, (128, 14, 14, 1))
         self.assertEqual(ds.xs.shape[0], ds.ys.shape[0])
+        self.assertEqual(ds.num_classes, 10)
 
     def test_agg_labels(self):
         ds = get_np_data(
@@ -24,6 +25,7 @@ class TestDataset(unittest.TestCase):
         )
         self.assertEqual(ds.ys.min(), 0)
         self.assertEqual(ds.ys.max(), 2)
+        self.assertEqual(ds.num_classes, 3)
 
         with self.assertRaises(Exception):
             get_np_data(
