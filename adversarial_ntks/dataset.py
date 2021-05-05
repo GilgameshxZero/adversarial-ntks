@@ -1,6 +1,6 @@
 import operator
 import os
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -28,7 +28,7 @@ def downsample_imgs(imgs, image_width):
 def get_np_data(
     name: str,  # "mnist" or "cifar10"
     split,
-    binary_labels: bool = False,
+    agg_labels: Optional[Tuple[Tuple, ...]] = None,
     flatten: bool = True,
     image_width: Optional[int] = None,
     data_dir: str = os.path.abspath(
@@ -52,9 +52,20 @@ def get_np_data(
     xs = xs.astype(dtype)
     xs /= 255.0  # normalize
 
-    if binary_labels:
-        n_classes = ys.max() + 1
-        ys = (ys >= (n_classes // 2)).astype(np.int)
+    if agg_labels is not None:
+        for i, agg1 in enumerate(agg_labels):
+            for agg2 in agg_labels[i + 1:]:
+                assert set(agg1).intersection(set(agg2)) == set()
+
+        for i, y in enumerate(ys):
+            ys[i] = -1
+            for j, agg in enumerate(agg_labels):
+                if y in agg:
+                    ys[i] = j
+                    break
+
+        xs = xs[ys >= 0]
+        ys = ys[ys >= 0]
 
     if image_width is not None:
         xs = downsample_imgs(xs, image_width)

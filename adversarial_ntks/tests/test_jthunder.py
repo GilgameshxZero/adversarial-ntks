@@ -17,14 +17,14 @@ class TestJThunder(unittest.TestCase):
         self.ds_train = get_np_data(
             name="mnist",
             split="train[:128]",
-            binary_labels=True,
+            agg_labels=((0,1,2),(3,6,8)),
             image_width=14,
         )
 
         self.ds_test = get_np_data(
             name="mnist",
             split="test[:32]",
-            binary_labels=True,
+            agg_labels=((0,1,2),(3,6,8)),
             image_width=14,
         )
         self.jtest_xs = jnp.array(self.ds_test.xs)
