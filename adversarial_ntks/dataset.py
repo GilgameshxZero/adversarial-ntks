@@ -1,6 +1,9 @@
+from __future__ import annotations
+
+import dataclasses
 import operator
 import os
-from typing import NamedTuple, Optional, Tuple
+from typing import Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,11 +12,53 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 
 
-class Dataset(NamedTuple):
+@dataclasses.dataclass
+class Dataset:
     xs: np.ndarray
     ys: np.ndarray
     num_classes: int
-    name: Optional[str] = None
+    one_hot: bool
+    name: str = "UnknownDS"
+
+    def __post_init__(self):
+        assert self.xs.shape[0] == self.ys.shape[0]
+        if self.one_hot:
+            assert self.ys.shape == (self.xs.shape[0], self.num_classes)
+        else:
+            assert self.ys.shape == (self.xs.shape[0], )
+            assert self.ys.max() < self.num_classes
+
+    def to_one_hot(self) -> Dataset:
+        if self.one_hot: return self
+        return Dataset(
+            xs=self.xs,
+            ys=tf.keras.utils.to_categorical(
+                self.ys,
+                num_classes=self.num_classes,
+            ),
+            num_classes=self.num_classes,
+            one_hot=True,
+            name=self.name,
+        )
+
+    def prefix(self, sz: int) -> Dataset:
+        return Dataset(
+            xs=self.xs[:sz],
+            ys=self.ys[:sz],
+            num_classes=self.num_classes,
+            one_hot=self.one_hot,
+            name=f"{self.name}[:{sz}]",
+        )
+
+    def subsample(self, sz: int) -> Dataset:
+        inds = np.random.choice(self.xs.shape[0], size=sz, replace=False)
+        return Dataset(
+            xs=self.xs[inds],
+            ys=self.ys[inds],
+            num_classes=self.num_classes,
+            one_hot=self.one_hot,
+            name=f"{self.name}[~{sz}]",
+        )
 
 
 def downsample_imgs(imgs, image_width):
@@ -80,6 +125,7 @@ def get_np_data(
         xs=xs,
         ys=ys,
         num_classes=ys.max() + 1,
+        one_hot=False,
         name=f"{name}-{split}",
     )
 
