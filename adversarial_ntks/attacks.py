@@ -61,7 +61,7 @@ def pgd(
     """
     Perform PGD on a dataset given a gradient function for the classifier.
 
-    X: input images. Pixels in [0, 1].
+    X: input images. Pixels in [0, 1]. Flattened.
     Y: binary labels.
     grad_func: Takes images (X) and outputs gradient of the classifier at the images.
     eps: Size of epsilon-ball around each datapoint.
