@@ -60,6 +60,15 @@ class Dataset:
             name=f"{self.name}[~{sz}]",
         )
 
+    def replace_xs(self, new_xs: np.ndarray) -> Dataset:
+        return Dataset(
+            xs=new_xs,
+            ys=self.ys,
+            num_classes=self.num_classes,
+            one_hot=self.one_hot,
+            name=f"self.name(replaced_xs)",
+        )
+
 
 def downsample_imgs(imgs, image_width):
     return tf.image.resize(

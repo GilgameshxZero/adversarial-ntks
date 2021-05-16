@@ -74,3 +74,7 @@ class TestDataset(unittest.TestCase):
     def test_subsample(self):
         ds = self.ds.subsample(17)
         self.assertEqual(ds.xs.shape[0], 17)
+
+    def test_replace_xs(self):
+        ds = self.ds.replace_xs(np.zeros_like(self.ds.xs))
+        self.assertFalse(np.any(ds.xs))
