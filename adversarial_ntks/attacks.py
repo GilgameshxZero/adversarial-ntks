@@ -2,6 +2,7 @@ from typing import Callable, Optional, Union
 
 import numpy as np
 import sklearn.preprocessing
+from tqdm.autonotebook import tqdm
 
 
 def _pgd(
@@ -57,6 +58,7 @@ def pgd(
     step_norm: Union[int, float],
     pixel_clip: bool,
     batch_size: Optional[int] = None,
+    tqdm_leave: bool = True,
 ) -> np.ndarray:
     """
     Perform PGD on a dataset given a gradient function for the classifier.
@@ -78,7 +80,7 @@ def pgd(
     assert batch_size <= num_samples
 
     ret = np.zeros_like(X)
-    for i in range((num_samples - 1) // batch_size + 1):
+    for i in tqdm(range((num_samples - 1) // batch_size + 1), leave=tqdm_leave):
         batch_lo = i * batch_size
         batch_hi = min(batch_lo + batch_size, num_samples)
 
