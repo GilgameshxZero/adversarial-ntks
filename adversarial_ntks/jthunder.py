@@ -157,6 +157,21 @@ def decision_function(clf: thundersvm.SVC, X: jnp.ndarray) -> jnp.ndarray:
     return _decision_function(kernel_type, jtp, X)
 
 
+def get_decision_function(clf: thundersvm.SVC):
+    """
+    Written like this to prevent leaking memory.
+    We want static_argnums to be as light as possible.
+    https://github.com/google/jax/issues/282
+    """
+    kernel_type = clf.kernel
+    jtp = _get_params(clf)
+
+    def f(X):
+        return _decision_function(kernel_type, jtp, X)
+
+    return f
+
+
 def predict(clf: thundersvm.SVC, X: jnp.ndarray) -> jnp.ndarray:
     """
     x: shape (n_features, )

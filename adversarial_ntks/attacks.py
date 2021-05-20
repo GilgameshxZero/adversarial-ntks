@@ -37,8 +37,9 @@ def _pgd(
             res = np.clip(res, X - eps, X + eps)
         else:
             offset = res - X
-            res = X + eps * sklearn.preprocessing.normalize(
-                offset, norm="l" + str(eps_norm), axis=1)
+            offset_norms = np.linalg.norm(offset, axis=-1, ord=2)
+            projection = X + eps * offset / offset_norms[:, np.newaxis]
+            res[offset_norms > eps] = projection[offset_norms > eps]
 
         # Clip to valid pixel range
         if pixel_clip:
