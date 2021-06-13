@@ -5,6 +5,7 @@ numpy
 sklearn
 scipy
 
+ipykernel
 tqdm
 
 clu
