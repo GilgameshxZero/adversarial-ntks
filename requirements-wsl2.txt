@@ -5,7 +5,7 @@
 --find-links https://storage.googleapis.com/jax-releases/jax_releases.html
 jax[cuda-111]
 
-tensorflow==2.5.0rc0
+tensorflow==2.5.1
 # END
 
 # Less critical stuff follows
