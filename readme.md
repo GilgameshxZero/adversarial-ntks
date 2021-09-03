@@ -63,13 +63,5 @@ GPU:
 ```cmd
 python -m pip install --upgrade pip
 pip install wheel
-pip install numpy==1.20 scipy six wheels\jax-3.8.10-11.0-8.0.5\jaxlib-0.1.60-cp38-none-win_amd64.whl -e jax -r requirements.txt -e vision_transformer -e robustness -e . torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
-```
-
-CPU:
-
-```cmd
-python -m pip install --upgrade pip
-pip install wheel
-pip install numpy==1.20 scipy six wheels\jax-3.8.10-11.0-8.0.5\jaxlib-0.1.60-cp38-none-win_amd64.whl -e jax -r requirements.txt -e vision_transformer -e robustness -e . torch==1.8.1+cpu torchvision==0.9.1+cpu torchaudio===0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
+pip install numpy~=1.20 scipy six wheels\jax-3.8.10-11.0-8.0.5\jaxlib-0.1.60-cp38-none-win_amd64.whl -e jax -r requirements.txt -e vision_transformer -e robustness -e . torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
 ```
