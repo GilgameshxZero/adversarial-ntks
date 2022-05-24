@@ -12,7 +12,7 @@ clu
 ml_collections
 cox
 
-tensorflow~=2.5
+tensorflow~=2.6
 tensorflow-datasets
 tensorflow-probability
 
